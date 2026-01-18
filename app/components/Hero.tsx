@@ -263,16 +263,16 @@ const Hero = () => {
                         href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="button-appear group relative inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 text-white text-[9px] font-black uppercase rounded-full overflow-hidden transition-all duration-300 active:scale-90 shadow-[0_0_20px_rgba(192,132,252,0.4)] active:shadow-[0_0_25px_rgba(192,132,252,0.6)] touch-manipulation border border-white/20"
+                        className="button-appear group relative inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 text-white text-[11px] font-black uppercase rounded-full overflow-hidden transition-all duration-300 active:scale-90 shadow-[0_0_20px_rgba(192,132,252,0.4)] active:shadow-[0_0_25px_rgba(192,132,252,0.6)] touch-manipulation border border-white/20"
                         style={{
                           WebkitTapHighlightColor: 'rgba(192, 132, 252, 0.3)',
                         }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400 opacity-0 group-active:opacity-100 transition-opacity duration-150" />
                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.3),transparent_70%)]" />
-                        <span className="relative flex items-center justify-center gap-1 whitespace-nowrap">
+                        <span className="relative flex items-center justify-center gap-1.5 whitespace-nowrap">
                           Join the community
-                          <ArrowRight className="w-3 h-3 group-active:translate-x-0.5 transition-transform" />
+                          <ArrowRight className="w-4 h-4 group-active:translate-x-0.5 transition-transform" />
                         </span>
                       </a>
                     </div>
