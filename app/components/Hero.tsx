@@ -213,14 +213,14 @@ const Hero = () => {
       <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-black/40 pointer-events-none z-1" />
 
       {/* Mobile: Logo top, Text bottom | Desktop: Original layout (Text left, Logo right) */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-start pt-20 md:pt-24 lg:pt-24 px-6 md:px-12 lg:px-20 pb-32 sm:pb-36 md:pb-40 lg:pb-12 pointer-events-none overflow-y-auto lg:overflow-y-visible">
-        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 lg:gap-20 items-start">
+      <div className="absolute inset-0 z-10 flex flex-col justify-start pt-12 md:pt-24 lg:pt-24 px-6 md:px-12 lg:px-20 pb-20 md:pb-40 lg:pb-12 pointer-events-none overflow-y-auto lg:overflow-y-visible">
+        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-2 md:gap-8 lg:gap-20 items-start">
           
           {/* Logo - Mobile: First (top), Desktop: Right side (order-2, 5 cols) */}
-          <div className="hero-content-element order-1 lg:order-2 lg:col-span-5 relative flex items-start justify-center lg:justify-end min-h-[160px] sm:min-h-[200px] md:min-h-[240px] lg:min-h-[600px] pointer-events-auto">
+          <div className="hero-content-element order-1 lg:order-2 lg:col-span-5 relative flex items-start justify-center lg:justify-end min-h-[30vh] md:min-h-[240px] lg:min-h-[600px] pointer-events-auto">
             <div
               ref={logoWrapperRef}
-              className="relative w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[460px] aspect-square transform will-change-transform"
+              className="relative w-full max-w-[45vw] md:max-w-[260px] lg:max-w-[460px] aspect-square transform will-change-transform"
               aria-hidden="true"
             >
               <canvas
@@ -232,7 +232,7 @@ const Hero = () => {
           </div>
 
           {/* Text Content - Mobile: Second (below logo), Desktop: Left side (order-1, 7 cols) */}
-          <div className="hero-content-element order-2 lg:order-1 lg:col-span-7 flex flex-col pointer-events-auto mb-8 sm:mb-10 lg:mb-0">
+          <div className="hero-content-element order-2 lg:order-1 lg:col-span-7 flex flex-col pointer-events-auto mb-4 md:mb-10 lg:mb-0 -mt-4 md:mt-0">
             <div className="space-y-2 sm:space-y-3">
               <div className="space-y-1">
                 <h1 className="text-white text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] tracking-tighter">
@@ -246,36 +246,37 @@ const Hero = () => {
                 </h2>
               </div>
               {/* Text content */}
-              <div className="pt-2 sm:pt-3 lg:pt-4">
-                {/* Mobile: Text with inline button on last line */}
+              <div className="pt-1 md:pt-3 lg:pt-4">
+                {/* Mobile: Text and button in separate rows */}
                 <div className="md:hidden">
-                  <p className="text-sm text-white/80 font-normal leading-relaxed">
+                  <p className="text-[13px] text-white/80 font-normal leading-relaxed">
                     {typewriterText}
                     {typewriterText.length < fullText.length && (
-                      <span className="inline-block w-0.5 h-5 bg-purple-400 ml-1 animate-pulse" />
-                    )}
-                    {showFirstButton && typewriterText.length >= fullText.length && (
-                      <>
-                        {"            "}
-                        <a
-                          href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="button-appear group relative inline-flex items-center px-4 py-2 ml-18 bg-linear-to-br from-violet-600 via-fuchsia-600 to-pink-600 text-white text-[10px] font-black uppercase rounded-lg overflow-hidden transition-all duration-300 active:scale-95 shadow-lg shadow-fuchsia-500/30 active:shadow-fuchsia-500/50 touch-manipulation align-middle"
-                          style={{
-                            WebkitTapHighlightColor: 'rgba(236, 72, 153, 0.3)',
-                            verticalAlign: 'middle',
-                          }}
-                        >
-                          <div className="absolute inset-0 bg-linear-to-br from-violet-400 via-fuchsia-400 to-pink-400 opacity-0 group-active:opacity-100 transition-opacity duration-200" />
-                          <span className="relative flex items-center justify-center gap-1 whitespace-nowrap">
-                            Join The Community
-                            <ArrowRight className="w-3.5 h-3.5 group-active:translate-x-0.5 transition-transform" />
-                          </span>
-                        </a>
-                      </>
+                      <span className="inline-block w-0.5 h-4 bg-purple-400 ml-1 animate-pulse" />
                     )}
                   </p>
+                  
+                  {/* Mobile Button - Separate row, far right */}
+                  {showFirstButton && typewriterText.length >= fullText.length && (
+                    <div className="flex justify-end mt-3">
+                      <a
+                        href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="button-appear group relative inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 text-white text-[9px] font-black uppercase rounded-full overflow-hidden transition-all duration-300 active:scale-90 shadow-[0_0_20px_rgba(192,132,252,0.4)] active:shadow-[0_0_25px_rgba(192,132,252,0.6)] touch-manipulation border border-white/20"
+                        style={{
+                          WebkitTapHighlightColor: 'rgba(192, 132, 252, 0.3)',
+                        }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400 opacity-0 group-active:opacity-100 transition-opacity duration-150" />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.3),transparent_70%)]" />
+                        <span className="relative flex items-center justify-center gap-1 whitespace-nowrap">
+                          Join the community
+                          <ArrowRight className="w-3 h-3 group-active:translate-x-0.5 transition-transform" />
+                        </span>
+                      </a>
+                    </div>
+                  )}
                 </div>
                 
                 {/* Desktop: Normal text */}
