@@ -87,6 +87,30 @@ html {
   background-color: #000;
   overflow-x: hidden;
   width: 100%;
+  /* Enhanced smooth scrolling - native on mobile, Lenis on desktop */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimize scrolling performance */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 body {
@@ -95,6 +119,10 @@ body {
   overflow-x: hidden;
   width: 100%;
   position: relative;
+  /* Mobile optimization */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 * {
@@ -147,5 +175,79 @@ body {
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* ===== MOBILE-FIRST OPTIMIZATIONS ===== */
+
+/* Touch-friendly tap targets - minimum 44x44px */
+@layer components {
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Smooth scroll performance optimization - Desktop only */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Mobile: Use native smooth scroll with momentum */
+@media (max-width: 1023px) {
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+
+  body {
+    overflow-y: auto;
+    overscroll-behavior-y: none;
+  }
+}
+
+/* GPU acceleration for smoother animations on mobile */
+@layer utilities {
+  .gpu-accelerate {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .prevent-jank {
+    contain: layout paint;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow */
+  * {
+    max-width: 100vw;
+  }
+
+  /* Optimize touch interactions */
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: rgba(168, 85, 247, 0.3);
+    touch-action: manipulation;
+  }
+
+  /* Improve text readability on mobile */
+  p, li, span {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
+/* Disable hover effects on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  button:hover, a:hover {
+    transform: none;
   }
 }

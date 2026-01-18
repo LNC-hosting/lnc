@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { animate } from "@/lib/hero/animation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+
 const Hero = () => {
   const logoCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const container = useRef<HTMLDivElement | null>(null);
@@ -19,8 +20,33 @@ const Hero = () => {
   const [typewriterText, setTypewriterText] = useState("");
   const [showFirstButton, setShowFirstButton] = useState(false);
   const [showSecondButton, setShowSecondButton] = useState(false);
-  const fullText =
-    "Join a community that builds Developers, designers, and makers building open-source projects together. A builders-first open community focused on shipping real projects and learning by doing. Join us in building the future, one commit at a time.Debugging the past in quiet hours.Deploying a year of innovation next.";
+
+  // Mobile: Shorter text ending with 2 words on line 4
+  const mobileText = "Developers, designers, and makers building open-source projects together.the future, one commit at a time.Debugging the past in quiet hours.Deploying a year of innovation next.";
+  
+  // Desktop: Full text
+  const desktopText =
+    "Join a community that builds Developers, designers, and makers building open-source projects together. the future, one commit at a time.Debugging the past in quiet hours.Deploying a year of innovation next.";
+  
+  const [isMobile, setIsMobile] = useState(false);
+  
+  const fullText = isMobile ? mobileText : desktopText;
+
+  // Detect mobile and enable smooth scrolling
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    document.documentElement.style.scrollBehavior = "smooth";
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      document.documentElement.style.scrollBehavior = "auto";
+    };
+  }, []);
+
   useGSAP(
     () => {
       if (!isLoading) return;
@@ -56,19 +82,27 @@ const Hero = () => {
     },
     { scope: container, dependencies: [isLoading] }
   );
+
   useEffect(() => {
     if (!showContent) return;
     let index = 0;
+    const communityDescriptionEnd = fullText.length;
+    
     typewriterTimerRef.current = setInterval(() => {
       if (index <= fullText.length) {
         setTypewriterText(fullText.slice(0, index));
+        
+        // Show button after community description is complete
+        if (index >= communityDescriptionEnd && !showFirstButton) {
+          setTimeout(() => setShowFirstButton(true), 300);
+        }
+        
         index++;
       } else {
         if (typewriterTimerRef.current) {
           clearInterval(typewriterTimerRef.current);
           typewriterTimerRef.current = null;
         }
-        setTimeout(() => setShowFirstButton(true), 300);
         setTimeout(() => setShowSecondButton(true), 600);
       }
     }, 30);
@@ -79,6 +113,7 @@ const Hero = () => {
       }
     };
   }, [showContent, fullText]);
+
   useEffect(() => {
     if (isLoading) return;
     const canvas = logoCanvasRef.current;
@@ -93,9 +128,10 @@ const Hero = () => {
       if (cleanup) cleanup();
     };
   }, [isLoading]);
+
   useEffect(() => {
     if (isLoading) return;
-    
+
     const handlePointerMove = (e: PointerEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -103,7 +139,6 @@ const Hero = () => {
       if (e.touches?.[0]) {
         mouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
       }
-
     };
     window.addEventListener("pointermove", handlePointerMove, {
       passive: true,
@@ -139,15 +174,12 @@ const Hero = () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [isLoading]);
+
   return (
     <div
       className="relative w-full min-h-screen overflow-hidden hero-element"
       ref={container}
     >
-      {/* <canvas
-        ref={canvasRef}
-        className="fixed inset-0 w-full h-full block z-0"
-      /> */}
       <svg
         ref={maskRef}
         className="absolute inset-0 z-20 w-full h-full pointer-events-none"
@@ -179,63 +211,16 @@ const Hero = () => {
       </svg>
       <div className="absolute inset-0 bg-linear-to-b from-purple-900/10 via-transparent to-black/70 pointer-events-none z-1" />
       <div className="absolute inset-0 bg-linear-to-r from-black/40 via-transparent to-black/40 pointer-events-none z-1" />
-      <div className="absolute inset-0 z-10 flex flex-col justify-start pt-16 md:pt-20 lg:pt-24 px-6 md:px-12 lg:px-20 pb-12 pointer-events-none">
-        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-          <div className="hero-content-element lg:col-span-7 flex flex-col pointer-events-auto">
-            <div className="space-y-3">
-              <div className="space-y-1">
-                <h1 className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] tracking-tighter">
-                  Code by <span className="night-glass">Night</span>
-                </h1>
-                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.1] tracking-tight">
-                  <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-cyan-300">
-                    Innovate by{" "}
-                  </span>
-                  <span className="light-radiance">Light</span>
-                </h2>
-              </div>
-              <div className="pt-4">
-                <p className="text-base md:text-lg lg:text-xl text-white/80 font-normal max-w-xl leading-relaxed">
-                  {typewriterText}
-                  {typewriterText.length < fullText.length && (
-                    <span className="inline-block w-0.5 h-5 bg-purple-400 ml-1 animate-pulse" />
-                  )}
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4 pt-10">
-                {showFirstButton && (
-                  <a
-                    href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button-appear group relative px-10 py-5 bg-linear-to-r from-purple-600 to-pink-600 text-white text-lg font-bold uppercase rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-[1.02] active:scale-95 pointer-events-auto"
-                  >
-                    <div className="absolute inset-0 bg-linear-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <span className="relative flex items-center justify-center gap-2">
-                      join the community
-                      <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </a>
-                )}
-                {showSecondButton && (
-                  <a
-                    href="https://linktr.ee/lnc_community"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button-appear group relative px-10 py-5 bg-white/5 backdrop-blur-sm text-white text-lg border-2 border-white/30 font-bold uppercase rounded-xl overflow-hidden transition-all duration-300 hover:bg-white/10 hover:border-white/50 hover:scale-[1.02] active:scale-95 pointer-events-auto"
-                  >
-                    <span className="relative flex items-center justify-center gap-2">
-                      follow us
-                    </span>
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="hero-content-element lg:col-span-5 relative flex items-start justify-center lg:justify-end min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] pointer-events-auto">
+
+      {/* Mobile: Logo top, Text bottom | Desktop: Original layout (Text left, Logo right) */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-start pt-20 md:pt-24 lg:pt-24 px-6 md:px-12 lg:px-20 pb-32 sm:pb-36 md:pb-40 lg:pb-12 pointer-events-none overflow-y-auto lg:overflow-y-visible">
+        <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 lg:gap-20 items-start">
+          
+          {/* Logo - Mobile: First (top), Desktop: Right side (order-2, 5 cols) */}
+          <div className="hero-content-element order-1 lg:order-2 lg:col-span-5 relative flex items-start justify-center lg:justify-end min-h-[160px] sm:min-h-[200px] md:min-h-[240px] lg:min-h-[600px] pointer-events-auto">
             <div
               ref={logoWrapperRef}
-              className="relative w-full max-w-[460px] aspect-square transform will-change-transform"
+              className="relative w-full max-w-[180px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[460px] aspect-square transform will-change-transform"
               aria-hidden="true"
             >
               <canvas
@@ -245,8 +230,98 @@ const Hero = () => {
               />
             </div>
           </div>
+
+          {/* Text Content - Mobile: Second (below logo), Desktop: Left side (order-1, 7 cols) */}
+          <div className="hero-content-element order-2 lg:order-1 lg:col-span-7 flex flex-col pointer-events-auto mb-8 sm:mb-10 lg:mb-0">
+            <div className="space-y-2 sm:space-y-3">
+              <div className="space-y-1">
+                <h1 className="text-white text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-[1.1] tracking-tighter">
+                  Code by <span className="night-glass">Night</span>
+                </h1>
+                <h2 className="text-[1.75rem] sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.1] tracking-tight">
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-cyan-300">
+                    Innovate by{" "}
+                  </span>
+                  <span className="light-radiance">Light</span>
+                </h2>
+              </div>
+              {/* Text content */}
+              <div className="pt-2 sm:pt-3 lg:pt-4">
+                {/* Mobile: Text with inline button on last line */}
+                <div className="md:hidden">
+                  <p className="text-sm text-white/80 font-normal leading-relaxed">
+                    {typewriterText}
+                    {typewriterText.length < fullText.length && (
+                      <span className="inline-block w-0.5 h-5 bg-purple-400 ml-1 animate-pulse" />
+                    )}
+                    {showFirstButton && typewriterText.length >= fullText.length && (
+                      <>
+                        {"            "}
+                        <a
+                          href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="button-appear group relative inline-flex items-center px-4 py-2 ml-18 bg-linear-to-br from-violet-600 via-fuchsia-600 to-pink-600 text-white text-[10px] font-black uppercase rounded-lg overflow-hidden transition-all duration-300 active:scale-95 shadow-lg shadow-fuchsia-500/30 active:shadow-fuchsia-500/50 touch-manipulation align-middle"
+                          style={{
+                            WebkitTapHighlightColor: 'rgba(236, 72, 153, 0.3)',
+                            verticalAlign: 'middle',
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-linear-to-br from-violet-400 via-fuchsia-400 to-pink-400 opacity-0 group-active:opacity-100 transition-opacity duration-200" />
+                          <span className="relative flex items-center justify-center gap-1 whitespace-nowrap">
+                            Join The Community
+                            <ArrowRight className="w-3.5 h-3.5 group-active:translate-x-0.5 transition-transform" />
+                          </span>
+                        </a>
+                      </>
+                    )}
+                  </p>
+                </div>
+                
+                {/* Desktop: Normal text */}
+                <p className="hidden md:block text-sm sm:text-base md:text-lg lg:text-xl text-white/80 font-normal leading-relaxed md:max-w-xl">
+                  {typewriterText}
+                  {typewriterText.length < fullText.length && (
+                    <span className="inline-block w-0.5 h-5 bg-purple-400 ml-1 animate-pulse" />
+                  )}
+                </p>
+              </div>
+              
+              {/* Desktop Only: Buttons below */}
+              <div className="hidden md:flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 sm:pt-8 lg:pt-10 items-start sm:items-center">
+                {showFirstButton && (
+                  <a
+                    href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button-appear group relative px-5 py-3 sm:px-10 sm:py-5 bg-linear-to-r from-purple-600 to-pink-600 text-white text-xs font-bold uppercase rounded-lg sm:rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-[1.02] active:scale-95 pointer-events-auto self-end sm:self-auto w-auto"
+                  >
+                    <div className="absolute inset-0 bg-linear-to-r from-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <span className="relative flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                      join the community
+                      <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </a>
+                )}
+                {showSecondButton && (
+                  <a
+                    href="https://linktr.ee/lnc_community"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hidden sm:flex button-appear group relative px-8 sm:px-10 py-4 sm:py-5 bg-white/5 backdrop-blur-sm text-white text-base sm:text-lg border-2 border-white/30 font-bold uppercase rounded-xl overflow-hidden transition-all duration-300 hover:bg-white/10 hover:border-white/50 hover:scale-[1.02] active:scale-95 pointer-events-auto"
+                  >
+                    <span className="relative flex items-center justify-center gap-2">
+                      follow us
+                    </span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
+
       <style jsx>{`
         @keyframes buttonSlideUp {
           from {
@@ -316,4 +391,5 @@ const Hero = () => {
     </div>
   );
 };
+
 export default Hero;
