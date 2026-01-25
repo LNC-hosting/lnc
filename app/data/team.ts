@@ -6,46 +6,54 @@ export interface TeamMember {
 }
 export const LEADS: TeamMember[] = [
   {
-    name: "Sarah Chen",
-    role: "Lead Architect",
+    name: "Rounaq Ansari",
+    role: "President",
     quote:
-      "We’re not just writing code. We’re architecting open collaboration.",
-    image: "/assets/images/avatar_sarah.png",
+      "What we call reality is often only the edge of our understanding",
+    image: "/assets/images/rounaq da.jpeg",
   },
   {
-    name: "Marcus Rodriguez",
-    role: "Community Lead",
-    quote: "Communities scale only when every voice matters.",
-    image: "/assets/images/avatar_marcus.png",
+    name: "Deep Ghosh",
+    role: "V.President",
+    quote: "The system was never built for me—so I created my own.",
+    image: "/assets/images/mepic.png",
   },
   {
-    name: "Alex Thompson",
-    role: "Design Lead",
-    quote: "Design is how it feels to build together.",
-    image: "/assets/images/avatar_alex.png",
+    name: "Jit",
+    role: "Dev team Lead",
+    quote: "I build what others only imagine.",
+    image: "/assets/images/jit.jpeg",
   },
   {
-    name: "Emily Davis",
-    role: "DevOps Lead",
-    quote: "Speed means nothing without stability.",
-    image: "/assets/images/avatar_sarah.png",
+    name: "Snihita",
+    role: "Design team Lead",
+    quote: "The only trophy that matters to me is a paycheck.",
+    image: "/assets/images/snihita.jpg",
   },
   {
-    name: "David Kim",
-    role: "Security Lead",
-    quote: "Trust is our most valuable system.",
-    image: "/assets/images/avatar_marcus.png",
+    name: "Mania",
+    role: "Design team V.Lead",
+    quote: "The more you weigh, the harder you are to kidnap.Stay safe.Eat cake",
+    image: "/assets/images/mania.jpeg",
   },
   {
-    name: "Jessica Lee",
-    role: "Product Lead",
-    quote: "Building the right thing comes first.",
-    image: "/assets/images/avatar_alex.png",
+    name: "Prachi",
+    role: "PR Lead",
+    quote: "Communication isn’t a skill here — it’s the job.",
+    image: "/assets/images/prachi.jpeg",
   },
-  {
-    name: "Ryan Park",
-    role: "Education Lead",
+  { 
+    name: "Rohit",
+    role: "Management Lead",
     quote: "Teaching multiplies impact.",
-    image: "/assets/images/avatar_sarah.png",
+    image: "/assets/images/rohit.jpeg",
   },
+  // {
+  //   name: "Krish Gupta",
+  //   role: "Dev Lead",
+  //   quote: "Teaching multiplies impact.",
+  //   image: "/assets/",
+  // },
+  
 ];
+

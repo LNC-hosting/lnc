@@ -23,6 +23,7 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${jetbrainsMono.variable} antialiased bg-transparent text-foreground overflow-x-hidden font-mono`}
+        suppressHydrationWarning
       >
         <SmoothScroll>
           <Starfield />
