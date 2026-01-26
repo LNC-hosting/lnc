@@ -12,11 +12,12 @@ export default function Partners() {
   const headerRef = useRef<HTMLDivElement>(null);
   const row1Ref = useRef<HTMLDivElement>(null);
   const row2Ref = useRef<HTMLDivElement>(null);
+  const tl1Ref = useRef<gsap.core.Tween | null>(null);
+  const tl2Ref = useRef<gsap.core.Tween | null>(null);
 
-  // Split communities into two rows
-  const midPoint = Math.ceil(COMMUNITIES.length / 2);
-  const row1Communities = COMMUNITIES.slice(0, midPoint);
-  const row2Communities = COMMUNITIES.slice(midPoint);
+  // Split communities into two rows based on priority
+  const row1Communities = COMMUNITIES.filter(community => community.priority === 1 || community.priority === 2);
+  const row2Communities = COMMUNITIES.filter(community => community.priority === 3);
 
   // Duplicate arrays for seamless infinite loop
   const row1Duplicated = [...row1Communities, ...row1Communities, ...row1Communities];
@@ -47,7 +48,7 @@ export default function Partners() {
       const row2Width = row2Ref.current.scrollWidth / 3;
 
       // Row 1 - continuous scroll to the right
-      gsap.to(row1Ref.current, {
+      tl1Ref.current = gsap.to(row1Ref.current, {
         x: -row1Width,
         duration: 25,
         ease: "none",
@@ -58,7 +59,7 @@ export default function Partners() {
       });
 
       // Row 2 - continuous scroll to the left (opposite direction)
-      gsap.fromTo(
+      tl2Ref.current = gsap.fromTo(
         row2Ref.current,
         { x: -row2Width },
         {
@@ -74,29 +75,65 @@ export default function Partners() {
     }
   }, []);
 
-  const renderLogo = (community: typeof COMMUNITIES[0], index: number) => (
-    <div
-      key={`${community.name}-${index}`}
-      className="group flex-shrink-0 flex items-center justify-center"
-    >
-      {/* Logo */}
-      <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 border border-white/10 bg-gradient-to-br from-[#1a1a1f] to-[#0d0d10] hover:border-purple-500/40 transition-all duration-300 cursor-pointer flex items-center justify-center p-3 md:p-4">
-        {/* Hover glow */}
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:to-transparent transition-all duration-500" />
+  const renderLogo = (community: typeof COMMUNITIES[0], index: number) => {
+    const logoRef = useRef<HTMLDivElement>(null);
 
-        {/* Logo image */}
-        <img
-          src={community.logo}
-          alt={`${community.name} logo`}
-          className="relative z-10 w-full h-full object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300 filter grayscale group-hover:grayscale-0"
-        />
+    useGSAP(() => {
+      if (logoRef.current) {
+        // Hover: Scale up and rotate slightly
+        const hoverAnim = gsap.to(logoRef.current, {
+          scale: 1.05,
+          rotation: 2,
+          duration: 0.3,
+          ease: "power2.out",
+          paused: true,
+        });
 
-        {/* Corner accents */}
-        <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-purple-500/30 group-hover:border-purple-400 transition-colors" />
-        <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-purple-500/30 group-hover:border-purple-400 transition-colors" />
+        // Click: Quick bounce effect
+        const bounceAnim = gsap.to(logoRef.current, {
+          scale: 1.1,
+          yoyo: true,
+          repeat: 1,
+          duration: 0.2,
+          ease: "bounce.out",
+          paused: true,
+        });
+
+        // Event listeners
+        const element = logoRef.current;
+        element.addEventListener('mouseenter', () => hoverAnim.play());
+        element.addEventListener('mouseleave', () => hoverAnim.reverse());
+        element.addEventListener('click', () => bounceAnim.restart());
+      }
+    }, { scope: logoRef });
+
+    return (
+      <div
+        ref={logoRef}
+        key={`${community.name}-${index}`}
+        className="group flex-shrink-0 flex items-center justify-center"
+      >
+        {/* Logo */}
+        <div className="relative h-16 md:h-20 lg:h-24 w-auto max-w-[180px] md:max-w-[260px] lg:max-w-[320px] border border-white/10 bg-gradient-to-br from-[#1a1a1f] to-[#0d0d10] hover:border-purple-500/40 transition-all duration-300 cursor-pointer flex items-center justify-center px-3 py-3 md:px-4 md:py-4 lg:px-5 lg:py-5">
+          {/* Hover glow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:to-transparent transition-all duration-500" />
+
+          {/* Logo image */}
+          <img
+            src={community.logo}
+            alt={`${community.name} logo`}
+            loading="lazy"
+            title={community.name}
+            className="relative z-10 h-full w-auto object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-300 filter grayscale group-hover:grayscale-0"
+          />
+
+          {/* Corner accents */}
+          <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-purple-500/30 group-hover:border-purple-400 transition-colors" />
+          <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-purple-500/30 group-hover:border-purple-400 transition-colors" />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section
@@ -136,6 +173,8 @@ export default function Partners() {
           <div
             ref={row1Ref}
             className="flex items-center gap-8 md:gap-12 will-change-transform"
+            onMouseEnter={() => tl1Ref.current?.pause()}
+            onMouseLeave={() => tl1Ref.current?.resume()}
           >
             {row1Duplicated.map((community, index) =>
               renderLogo(community, index)
@@ -148,6 +187,8 @@ export default function Partners() {
           <div
             ref={row2Ref}
             className="flex items-center gap-8 md:gap-12 will-change-transform"
+            onMouseEnter={() => tl2Ref.current?.pause()}
+            onMouseLeave={() => tl2Ref.current?.resume()}
           >
             {row2Duplicated.map((community, index) =>
               renderLogo(community, index)
