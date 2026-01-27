@@ -8,8 +8,7 @@ export const LEADS: TeamMember[] = [
   {
     name: "Rounaq Ansari",
     role: "President",
-    quote:
-      "What we call reality is often only the edge of our understanding",
+    quote: "What we call reality is often only the edge of our understanding",
     image: "/assets/images/rounaq da.jpeg",
   },
   {
@@ -21,7 +20,8 @@ export const LEADS: TeamMember[] = [
   {
     name: "Jit",
     role: "Dev team Lead",
-    quote: "I build what others only imagine.",
+    quote:
+      "Farming was a better option, but I stayed for the love of building.",
     image: "/assets/images/jit.jpeg",
   },
   {
@@ -33,7 +33,8 @@ export const LEADS: TeamMember[] = [
   {
     name: "Mania",
     role: "Design team V.Lead",
-    quote: "The more you weigh, the harder you are to kidnap.Stay safe.Eat cake",
+    quote:
+      "The more you weigh, the harder you are to kidnap.Stay safe.Eat cake",
     image: "/assets/images/mania.jpeg",
   },
   {
@@ -42,7 +43,7 @@ export const LEADS: TeamMember[] = [
     quote: "Communication isn’t a skill here — it’s the job.",
     image: "/assets/images/prachi.jpeg",
   },
-  { 
+  {
     name: "Rohit",
     role: "Management Lead",
     quote: "Teaching multiplies impact.",
@@ -54,6 +55,4 @@ export const LEADS: TeamMember[] = [
   //   quote: "Teaching multiplies impact.",
   //   image: "/assets/",
   // },
-  
 ];
-
