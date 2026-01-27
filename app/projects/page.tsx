@@ -1,27 +1,48 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, ArrowUpDown } from "lucide-react";
 import { PROJECTS } from "../data/projects";
+import { fetchAllProjects, EnrichedProject } from "../utils/github";
 import ProjectCard from "../components/ProjectCard";
+
 export default function ProjectsPage() {
+  const [projects, setProjects] = useState<EnrichedProject[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"name" | "newest">("newest");
+
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const githubUrls = PROJECTS.map((p) => p.githubUrl);
+        const enrichedProjects = await fetchAllProjects(githubUrls);
+        setProjects(enrichedProjects);
+      } catch (error) {
+        console.error("Failed to load projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProjects();
+  }, []);
+
   const filteredProjects = useMemo(() => {
-    let result = [...PROJECTS];
+    let result = [...projects];
     if (search.trim()) {
       const query = search.toLowerCase();
       result = result.filter(
         (p) =>
           p.name.toLowerCase().includes(query) ||
           p.description.toLowerCase().includes(query) ||
-          p.tags.some((tag) => tag.toLowerCase().includes(query))
+          p.topics.some((topic) => topic.toLowerCase().includes(query))
       );
     }
     if (sortBy === "name") {
       result.sort((a, b) => a.name.localeCompare(b.name));
     }
     return result;
-  }, [search, sortBy]);
+  }, [projects, search, sortBy]);
   return (
     <main className="min-h-screen pt-32 pb-20 px-6 font-pixel relative z-10">
       <div className="max-w-7xl mx-auto">
@@ -67,7 +88,16 @@ export default function ProjectsPage() {
             </div>
           </div>
         </div>
-        {filteredProjects.length > 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+              <p className="text-white/60 text-sm font-medium">
+                Loading projects from GitHub...
+              </p>
+            </div>
+          </div>
+        ) : filteredProjects.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
               <ProjectCard

@@ -1,4 +1,4 @@
-export interface Achievement {
+ export interface Achievement {
   image: string;
   title: string;
   description: string;

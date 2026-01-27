@@ -1,19 +1,40 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { PROJECTS } from "../data/projects";
+import { fetchAllProjects, EnrichedProject } from "../utils/github";
 import ProjectCard from "./ProjectCard";
 
 export default function ProjectsShowcase() {
+  const [projects, setProjects] = useState<EnrichedProject[]>([]);
+  const [loading, setLoading] = useState(true);
   const triggerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const githubUrls = PROJECTS.map((p) => p.githubUrl);
+        const enrichedProjects = await fetchAllProjects(githubUrls);
+        setProjects(enrichedProjects);
+      } catch (error) {
+        console.error("Failed to load projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProjects();
+  }, []);
+
   useGSAP(
     () => {
+      if (loading || projects.length === 0) return;
+
       gsap.registerPlugin(ScrollTrigger);
 
       const trigger = triggerRef.current;
@@ -89,7 +110,7 @@ export default function ProjectsShowcase() {
         ease: "none",
       });
     },
-    { scope: triggerRef }
+    { scope: triggerRef, dependencies: [loading, projects] }
   );
 
   return (
@@ -112,24 +133,43 @@ export default function ProjectsShowcase() {
           </div>
 
           <div className="absolute inset-0 flex items-center">
-            <div
-              ref={cardsRef}
-              className="flex gap-8 px-6 md:px-12 w-max will-change-transform"
-            >
-              {PROJECTS.map((project) => (
-                <div key={project.id} className="w-[85vw] md:w-88 shrink-0">
-                  <ProjectCard project={project} />
+            {loading ? (
+              <div className="flex items-center justify-center w-full h-full">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                  <p className="text-white/60 text-sm font-medium">
+                    Loading projects from GitHub...
+                  </p>
                 </div>
-              ))}
-
-              <div className="w-[85vw] md:w-88 shrink-0 flex items-center justify-center border border-white/20 rounded-md bg-[#0d1117]">
-                <Link href="/projects">
-                  <span className="text-xl font-bold text-[#58a6ff]">
-                    View All Projects →
-                  </span>
-                </Link>
               </div>
-            </div>
+            ) : (
+              <div
+                ref={cardsRef}
+                className="flex gap-8 px-6 md:px-12 w-max will-change-transform"
+              >
+                {projects.map((project) => (
+                  <div
+                    key={project.id}
+                    className="w-[85vw] md:w-[400px] shrink-0"
+                  >
+                    <ProjectCard project={project} />
+                  </div>
+                ))}
+
+                <div className="w-[85vw] md:w-[400px] shrink-0 flex items-center justify-center border border-white/20 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md hover:border-purple-500/50 transition-all duration-300 group">
+                  <Link href="/projects" className="p-8 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-purple-300 group-hover:to-pink-300 transition-all duration-300">
+                        View All Projects
+                      </span>
+                      <span className="text-4xl group-hover:translate-x-2 transition-transform duration-300">
+                        →
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
