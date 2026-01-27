@@ -54,7 +54,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
         </div>
         <div className="w-full md:w-2/3 p-6 md:p-8 overflow-y-auto">
           <div className="prose prose-invert max-w-none prose-sm font-sans">
-            {project.readme.split("\n").map((line, i) => {
+            {project.readme?.split("\n").map((line, i) => {
               if (line.startsWith("# "))
                 return (
                   <h1

@@ -11,6 +11,7 @@ export interface Project {
   stars?: number;
   forks?: number;
   link?: string;
+  readme?: string;
 }
 
 export const PROJECTS: Project[] = [
