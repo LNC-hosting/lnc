@@ -15,20 +15,16 @@ const Hero = () => {
   const rafRef = useRef<number | null>(null);
   const textRef = useRef(null);
   const maskRef = useRef<SVGSVGElement>(null);
-  const typewriterTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showContent, setShowContent] = useState(false);
-  const [typewriterText, setTypewriterText] = useState("");
-  const [showFirstButton, setShowFirstButton] = useState(false);
-  const [showSecondButton, setShowSecondButton] = useState(false);
 
   // Mobile: Shorter text ending with 2 words on line 4
   const mobileText =
-    "Developers, designers, and makers building open-source projects together.the future, one commit at a time.Debugging the past in quiet hours.Deploying a year of innovation next.";
+    "Developers, designers, and makers building open-source projects together. The future, one commit at a time. Debugging the past in quiet hours. Deploying a year of innovation next.";
 
   // Desktop: Full text
   const desktopText =
-    "Join a community that builds Developers, designers, and makers building open-source projects together. the future, one commit at a time.Debugging the past in quiet hours.Deploying a year of innovation next.";
+    "Join a community that builds the future. Developers, designers, and makers building open-source projects together. One commit at a time. Debugging the past in quiet hours. Deploying a year of innovation next.";
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -42,12 +38,12 @@ const Hero = () => {
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
-    document.documentElement.style.scrollBehavior = "smooth";
+    if (!isMobile) document.documentElement.style.scrollBehavior = "smooth";
     return () => {
       window.removeEventListener("resize", checkMobile);
       document.documentElement.style.scrollBehavior = "auto";
     };
-  }, []);
+  }, [isMobile]);
 
   useGSAP(
     () => {
@@ -84,37 +80,6 @@ const Hero = () => {
     },
     { scope: container, dependencies: [isLoading] },
   );
-
-  useEffect(() => {
-    if (!showContent) return;
-    let index = 0;
-    const communityDescriptionEnd = fullText.length;
-
-    typewriterTimerRef.current = setInterval(() => {
-      if (index <= fullText.length) {
-        setTypewriterText(fullText.slice(0, index));
-
-        // Show button after community description is complete
-        if (index >= communityDescriptionEnd && !showFirstButton) {
-          setTimeout(() => setShowFirstButton(true), 300);
-        }
-
-        index++;
-      } else {
-        if (typewriterTimerRef.current) {
-          clearInterval(typewriterTimerRef.current);
-          typewriterTimerRef.current = null;
-        }
-        setTimeout(() => setShowSecondButton(true), 600);
-      }
-    }, 30);
-    return () => {
-      if (typewriterTimerRef.current) {
-        clearInterval(typewriterTimerRef.current);
-        typewriterTimerRef.current = null;
-      }
-    };
-  }, [showContent, fullText]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -179,7 +144,7 @@ const Hero = () => {
 
   return (
     <div
-      className="relative w-full min-h-screen  overflow-hidden hero-element"
+      className="relative w-full min-h-screen overflow-hidden hero-element"
       ref={container}
     >
       <svg
@@ -268,7 +233,7 @@ const Hero = () => {
       />
 
       {/* Mobile: Logo top, Text bottom | Desktop: Original layout (Text left, Logo right) */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-start pt-12 md:pt-24 lg:pt-24 px-6 md:px-12 lg:px-20 pb-20 md:pb-40 lg:pb-12 pointer-events-none overflow-y-auto lg:overflow-y-visible">
+      <div className="relative md:absolute inset-0 z-10 flex flex-col justify-start pt-12 md:pt-24 lg:pt-24 px-6 md:px-12 lg:px-20 pb-20 md:pb-40 lg:pb-12 pointer-events-none overflow-y-auto lg:overflow-y-visible">
         <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-2 md:gap-8 lg:gap-20 items-start">
           {/* Logo - Mobile: First (top), Desktop: Right side (order-2, 5 cols) */}
           <div className="hero-content-element order-1 lg:order-2 lg:col-span-5 relative flex items-start justify-center lg:justify-end min-h-[30vh] md:min-h-60 lg:min-h-150 pointer-events-auto">
@@ -289,11 +254,11 @@ const Hero = () => {
           <div className="hero-content-element order-2 lg:order-1 lg:col-span-7 flex flex-col pointer-events-auto mb-4 md:mb-10 lg:mb-0 -mt-4 md:mt-0 pt-20">
             <div className="space-y-2 sm:space-y-3">
               <div className="space-y-1">
-                <h1 className="text-white text-[2rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-[1.12] tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
+                <h1 className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-extrabold leading-[1.12] tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
                   Code by <span className="night-glass">Night</span>
                 </h1>
 
-                <h1 className="text-[1.5rem] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black leading-[1.12] tracking-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl font-black leading-[1.12] tracking-tight">
                   <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-cyan-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
                     Innovate by{" "}
                   </span>
@@ -302,123 +267,119 @@ const Hero = () => {
               </div>
               {/* Text content */}
               <div className="pt-1 md:pt-3 lg:pt-4">
-                {/* Mobile: Text and button in separate rows */}
+                {/* Mobile: Text */}
                 <div className="md:hidden">
                   <p className="text-sm text-white/50 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    {typewriterText}
-                    {typewriterText.length < fullText.length && (
-                      <span className="inline-block w-0.5 h-4 bg-purple-400 ml-1 animate-pulse" />
-                    )}
+                    {fullText}
                   </p>
-
-                  {/* Mobile Button - Separate row, far right */}
-                  {showFirstButton &&
-                    typewriterText.length >= fullText.length && (
-                      <div className="flex justify-end mt-3">
-                        <a
-                          href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="button-appear group relative inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-fuchsia-500 via-purple-500 to-indigo-500 text-white text-[11px] font-black uppercase rounded-full overflow-hidden transition-all duration-300 active:scale-90 shadow-[0_0_20px_rgba(192,132,252,0.4)] active:shadow-[0_0_25px_rgba(192,132,252,0.6)] touch-manipulation border border-white/20"
-                          style={{
-                            WebkitTapHighlightColor: "rgba(192, 132, 252, 0.3)",
-                          }}
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-fuchsia-400 via-purple-400 to-indigo-400 opacity-0 group-active:opacity-100 transition-opacity duration-150" />
-                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.3),transparent_70%)]" />
-                          <span className="relative flex items-center justify-center gap-1.5 whitespace-nowrap">
-                            Join the community
-                            <ArrowRight className="w-4 h-4 group-active:translate-x-0.5 transition-transform" />
-                          </span>
-                        </a>
-                      </div>
-                    )}
                 </div>
 
                 {/* Desktop: Normal text */}
                 <p className="hidden md:block text-sm sm:text-base md:text-md lg:text-lg text-white/70 font-normal leading-relaxed md:max-w-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
-                  {typewriterText}
-                  {typewriterText.length < fullText.length && (
-                    <span className="inline-block w-0.5 h-5 bg-purple-400 ml-1 animate-pulse" />
-                  )}
+                  {fullText}
                 </p>
               </div>
 
-              {/* ========================================
-                  IMPROVED CTA HIERARCHY
-                  Primary: Bold, prominent, clear action
-                  Secondary: Receded, supportive, understated
-                  ======================================== */}
-              <div className="hidden md:flex flex-col sm:flex-row gap-3 sm:gap-5 pt-6 sm:pt-8 lg:pt-10 items-start sm:items-center">
+              {/* ======================================== Desktop Button ======================================== */}
+              <div className="hidden md:flex flex-col align-middle sm:flex-row gap-3 sm:gap-5 pt-6 sm:pt-8 lg:pt-10 items-center">
                 {/* PRIMARY CTA - Dominant action */}
-                {showFirstButton && (
-                  <a
-                    href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button-appear group relative px-5 py-5 text-white text-base sm:text-md font-bold tracking-wide rounded-md overflow-hidden transition-all duration-500  pointer-events-auto self-end sm:self-auto w-auto primary-cta"
-                  >
-                    {/* Deep purple gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-violet-800 to-indigo-900" />
+                <a
+                  href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative px-5 py-5 text-white text-base sm:text-md font-bold tracking-wide rounded-md overflow-hidden transition-all duration-500 pointer-events-auto self-end sm:self-auto w-auto primary-cta"
+                >
+                  {/* Deep purple gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-violet-800 to-indigo-900" />
 
-                    {/* Hover glow effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-violet-600 to-fuchsia-600 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-violet-600 to-fuchsia-600 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                    {/* Shimmer sweep */}
-                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-yellow-500/50 to-transparent skew-x-12" />
+                  {/* Shimmer sweep */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-yellow-500/50 to-transparent skew-x-12" />
 
-                    {/* Dark glassmorphic overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/20" />
+                  {/* Dark glassmorphic overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/20" />
 
-                    {/* Ambient purple glow */}
-                    <div className="absolute -inset-[3px] bg-gradient-to-r from-purple-600/60 via-violet-600/60 to-fuchsia-600/60 rounded-md blur-2xl opacity-50 group-hover:opacity-80 group-hover:blur-3xl transition-all duration-700 -z-10" />
+                  {/* Ambient purple glow */}
+                  <div className="absolute -inset-[3px] bg-gradient-to-r from-purple-600/60 via-violet-600/60 to-fuchsia-600/60 rounded-md blur-2xl opacity-50 group-hover:opacity-80 group-hover:blur-3xl transition-all duration-700 -z-10" />
 
-                    {/* Refined border */}
-                    <div className="absolute inset-0 rounded-md bg-gradient-to-br from-purple-400/30 via-violet-400/20 to-transparent p-[1px]">
-                      <div className="absolute inset-[1px] rounded-md bg-transparent" />
-                    </div>
+                  {/* Refined border */}
+                  <div className="absolute inset-0 rounded-md bg-gradient-to-br from-purple-400/30 via-violet-400/20 to-transparent p-[1px]">
+                    <div className="absolute inset-[1px] rounded-md bg-transparent" />
+                  </div>
 
-                    <span className="relative flex items-center justify-center gap-3 whitespace-nowrap drop-shadow-lg">
-                      <span className="transition-transform duration-300 ">
-                        Join Whatsapp Community
-                      </span>
-                      <FaWhatsapp className="w-6 h-6 transition-all duration-300" />
+                  <span className="relative flex items-center justify-center gap-3 whitespace-nowrap drop-shadow-lg">
+                    <span className="transition-transform duration-300">
+                      Join Our Community
                     </span>
-                  </a>
-                )}
+                    <FaWhatsapp className="w-6 h-6 transition-all duration-300" />
+                  </span>
+                </a>
 
-                {showSecondButton && (
-                  <a
-                    href="https://linktr.ee/lnc_community"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hidden sm:flex button-appear group relative px-5 py-5 text-white text-base sm:text-md tracking-wide rounded-md overflow-hidden transition-all duration-500 pointer-events-auto secondary-cta"
-                  >
-                    {/* background */}
-                    <div className="absolute inset-0 bg-black backdrop-blur-sm" />
+                <a
+                  href="https://linktr.ee/lnc_community"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex group relative px-5 py-5 text-white text-base sm:text-md tracking-wide rounded-md overflow-hidden transition-all duration-500 pointer-events-auto secondary-cta"
+                >
+                  {/* background */}
+                  <div className="absolute inset-0 bg-black backdrop-blur-sm" />
 
-                    {/* border */}
-                    <div className="absolute inset-0 rounded-md border border-purple-500/20 group-hover:border-purple-400/40 transition-colors duration-500" />
+                  {/* border */}
+                  <div className="absolute inset-0 rounded-md border border-purple-500/20 group-hover:border-purple-400/40 transition-colors duration-500" />
 
-                    {/* content */}
-                    <span className="relative flex items-center gap-4 text-white/70 group-hover:text-white transition-colors duration-300">
-                      {/* icon stack */}
-                      <span className="flex items-center">
-                        <FaWhatsapp className="w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-30" />
-                        <FaInstagram className="-ml-2 w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-20" />
-                        <FaLinkedin className="-ml-2 w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-10" />
-                      </span>
-
-                      {/* label */}
-                      <span className="transition-transform duration-300 group-hover:translate-x-[-4px]">
-                        Social Media
-                      </span>
-
-                      {/* arrow */}
-                      <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  {/* content */}
+                  <span className="relative flex items-center gap-4 text-white/70 group-hover:text-white transition-colors duration-300">
+                    {/* icon stack */}
+                    <span className="flex items-center">
+                      <FaWhatsapp className="w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-30" />
+                      <FaInstagram className="-ml-2 w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-20" />
+                      <FaLinkedin className="-ml-2 w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-10" />
                     </span>
-                  </a>
-                )}
+
+                    {/* label */}
+                    <span className="transition-transform duration-300 group-hover:translate-x-[-4px]">
+                      Social Media
+                    </span>
+
+                    {/* arrow */}
+                    <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+                  </span>
+                </a>
+              </div>
+
+              {/* 
+              ========================================             
+              Mobile: Buttons below text, full width
+              ========================================
+              */}
+              <div className="flex flex-col gap-3 w-full sm:hidden px-4 pt-6">
+                {/* Primary Mobile CTA */}
+                <a
+                  href="https://chat.whatsapp.com/BsuIBMdpsRxCc8bi9IFYIq"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full py-4 rounded-lg bg-gradient-to-r from-purple-700 to-violet-700 text-white text-base font-semibold active:scale-[0.98] transition-transform"
+                >
+                  <FaWhatsapp className="w-6 h-6" />
+                  <span>Join Our Community</span>
+                </a>
+
+                {/* Secondary Mobile CTA */}
+                <a
+                  href="https://linktr.ee/lnc_community"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 w-full py-4 rounded-lg bg-neutral-900 border border-purple-500/30 text-white/90 text-base font-medium active:scale-[0.98] transition-transform"
+                >
+                  <span className="flex items-center">
+                    <FaWhatsapp className="w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-30" />
+                    <FaInstagram className="-ml-2 w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-20" />
+                    <FaLinkedin className="-ml-2 w-5 h-5 text-white/80 bg-black rounded-full p-[2px] z-10" />
+                  </span>
+                  <span>Social Links</span>
+                </a>
               </div>
             </div>
           </div>
@@ -426,20 +387,6 @@ const Hero = () => {
       </div>
 
       <style jsx>{`
-        @keyframes buttonSlideUp {
-          from {
-            opacity: 0;
-            transform: translateY(16px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .button-appear {
-          animation: buttonSlideUp 0.6s ease-out forwards;
-        }
-
         /* Primary CTA enhancement */
         .primary-cta {
           box-shadow:
@@ -487,8 +434,10 @@ const Hero = () => {
           filter: blur(4px);
         }
         .light-radiance {
+          letter-spacing: 0.04em;
           position: relative;
           display: inline-block;
+
           background: linear-gradient(
             135deg,
             #fef3c7 0%,
@@ -498,12 +447,88 @@ const Hero = () => {
             #f59e0b 80%,
             #d97706 100%
           );
+
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.7))
-            drop-shadow(0 0 6px rgba(245, 158, 11, 0.5))
-            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+
+          opacity: 0;
+          filter: none;
+
+          animation: bulb-on 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          animation-delay: 3.5s;
+        }
+
+        /* LIGHT BULB IGNITION */
+        @keyframes bulb-on {
+          /* fully off */
+          0% {
+            opacity: 0;
+            filter: none;
+          }
+
+          /* weak spark */
+          15% {
+            opacity: 0.25;
+            filter: drop-shadow(0 0 3px rgba(250, 204, 21, 0.25));
+          }
+
+          /* flicker off */
+          22% {
+            opacity: 0.05;
+            filter: none;
+          }
+
+          /* unstable flicker */
+          30% {
+            opacity: 0.6;
+            filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.4));
+          }
+
+          38% {
+            opacity: 0.15;
+            filter: none;
+          }
+
+          /* power surge */
+          55% {
+            opacity: 0.95;
+            filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.85))
+              drop-shadow(0 0 6px rgba(245, 158, 11, 0.6));
+          }
+
+          /* stable glow */
+          100% {
+            opacity: 1;
+            filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.7))
+              drop-shadow(0 0 6px rgba(245, 158, 11, 0.5))
+              drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+          }
+        }
+
+        /* OPTIONAL: subtle living glow after ignition */
+        .light-radiance::after {
+          content: "";
+          position: absolute;
+          inset: -20%;
+          background: radial-gradient(
+            circle,
+            rgba(250, 204, 21, 0.15),
+            transparent 70%
+          );
+          opacity: 0;
+          animation: halo 6s ease-in-out 1.6s infinite;
+          pointer-events: none;
+        }
+
+        @keyframes halo {
+          0%,
+          100% {
+            opacity: 0.35;
+          }
+          50% {
+            opacity: 0.2;
+          }
         }
         @media (max-width: 768px) {
           .night-glass {
