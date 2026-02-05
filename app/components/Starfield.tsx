@@ -27,7 +27,7 @@ export default function Starfield() {
 
     mouseRef.current = { x: width / 2, y: height / 2 };
 
-    const NUM_STARS = 1500;
+    const NUM_STARS = 1000;
     const TARGET_SPEED = prefersReducedMotion ? 0 : 2;
     currentSpeedRef.current = TARGET_SPEED;
 
@@ -39,7 +39,7 @@ export default function Starfield() {
           y: Math.random() * height - height / 2,
           z: Math.random() * width,
           color: isPurple
-            ? `rgba(188, 19, 254, ${Math.random() *1})`
+            ? `rgba(188, 19, 254, ${Math.random() * 1})`
             : `rgba(254, 254, 254, ${Math.random() * 0.3})`,
         });
       }
@@ -47,7 +47,7 @@ export default function Starfield() {
 
     const stars = starsRef.current;
     isActiveRef.current = !prefersReducedMotion;
-    const IDLE_TIMEOUT = 3000;
+    const IDLE_TIMEOUT = 10000;
 
     const clearIdle = () => {
       if (idleTimerRef.current) {
@@ -85,7 +85,7 @@ export default function Starfield() {
       // const t = Math.min(distCenter / maxDist, 1);
 
       const repulsionStrength = 3;
-      const repulsionRadius = 200;
+      const repulsionRadius = 100;
 
       const moving = Math.abs(currentSpeedRef.current) > 0.001;
 

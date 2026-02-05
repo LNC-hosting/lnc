@@ -3,10 +3,9 @@ const config = {
     "@tailwindcss/postcss": {},
   },
   theme: {
-    extend: {
-      fontFamily: {
-        pixel: "var(--font-pixel)",
-      },
+    fontFamily: {
+      sans: "var(--font-space-grotesk)",
+      pixel: "var(--font-pixel)",
     },
   },
 };

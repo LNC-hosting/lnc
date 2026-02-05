@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
-import { EnrichedProject } from "../utils/github";
+import { Project } from "../data/projects";
 import Image from "next/image";
 
 interface ProjectCardProps {
-  project: EnrichedProject;
+  project: Project;
   className?: string;
 }
 
@@ -12,6 +12,14 @@ export default function ProjectCard({
   project,
   className = "",
 }: ProjectCardProps) {
+  if (!project.link) {
+    return (
+      <div
+        className={`relative group h-[420px] w-full rounded-xl overflow-hidden block ${className}`}
+      />
+    );
+  }
+
   return (
     <Link
       href={project.link}
@@ -24,7 +32,6 @@ export default function ProjectCard({
 
       {/* Glass morphism card */}
       <div className="relative h-full backdrop-blur-md bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 group-hover:border-purple-500/50 transition-all duration-300 rounded-xl flex flex-col overflow-hidden">
-
         {/* Featured Image Section - Only if image exists */}
         {project.image && (
           <div className="relative h-48 w-full overflow-hidden border-b border-white/10">
@@ -66,12 +73,14 @@ export default function ProjectCard({
           {/* Footer with owner info */}
           <div className="flex items-center gap-3 mt-6 pt-4 border-t border-white/10">
             <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-purple-500/30 group-hover:ring-purple-400/60 transition-all duration-300">
-              <Image
-                src={project.ownerAvatar}
-                alt={project.owner}
-                fill
-                className="object-cover"
-              />
+              {project.ownerAvatar && project.owner && (
+                <Image
+                  src={project.ownerAvatar}
+                  alt={project.owner}
+                  fill
+                  className="object-cover"
+                />
+              )}
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold text-white/90">

@@ -2,16 +2,24 @@ export interface Project {
   id: string;
   name: string;
   description: string;
+
   image?: string;
-  tags: string[];
   icon?: string;
+
+  tags: string[];
   category?: string;
   technologies?: string[];
+
   language?: string;
   stars?: number;
   forks?: number;
+
   link?: string;
   readme?: string;
+
+  // ✅ GitHub / source metadata (optional)
+  owner?: string;
+  ownerAvatar?: string;
 }
 
 export const PROJECTS: Project[] = [
@@ -21,7 +29,7 @@ export const PROJECTS: Project[] = [
     description:
       "Fast CLI to generate and configure backend projects in Express.js or vanilla JS with WebSocket support.",
     tags: ["Backend"],
-    image: "/assets/images/cta_builder.png",
+    image: "/assets/images/turon.png",
     icon: "🌐",
     category: "Backend",
     technologies: ["Backend", "ExpressJS", "Websockets"],
@@ -29,6 +37,8 @@ export const PROJECTS: Project[] = [
     stars: 1,
     forks: 2,
     link: "https://github.com/LNC-Network/turon",
+    owner: "LNC-Network",
+    ownerAvatar: "/assets/images/lnc.png",
   },
   {
     id: "2",
@@ -36,12 +46,15 @@ export const PROJECTS: Project[] = [
     description: "Calmer Reading",
     tags: ["React", "Tailwind"],
     icon: "🎨",
+    image: "/assets/images/higher.png",
     category: "React",
     technologies: ["React", "TypeScript", "Tailwind CSS", "Storybook"],
     language: "TypeScript",
     stars: 0,
     forks: 2,
     link: "https://github.com/LNC-Network/Higher",
+    owner: "LNC-Network",
+    ownerAvatar: "/assets/images/lnc.png",
   },
   {
     id: "3",
@@ -56,6 +69,8 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 0,
     link: "https://github.com/LNC-Network/TinyVector",
+    owner: "LNC-Network",
+    ownerAvatar: "/assets/images/lnc.png",
   },
   {
     id: "4",
@@ -69,6 +84,8 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 1,
     link: "https://github.com/LNC-Network/lnc-adminPanel",
+    owner: "LNC-Network",
+    ownerAvatar: "/assets/images/lnc.png",
   },
 
   // =========================
@@ -87,21 +104,9 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 0,
     link: "https://github.com/Jit-nath/3D-Model-Viewer",
-    image: "/assets/images/projects/3d-model-viewer.png",
-  },
-  {
-    id: "6",
-    name: "TokenBucket",
-    description:
-      "Proxy service that caches LLM responses to cut down on API call costs.",
-    tags: ["Backend", "AI", "Infra"],
-    icon: "🪣",
-    category: "Backend",
-    technologies: ["Docker", "Caching", "Proxy", "LLM"],
-    language: "Dockerfile",
-    stars: 0,
-    forks: 0,
-    link: "https://github.com/Jit-nath/TokenBucket",
+    image: "/assets/images/model-viewer.png",
+    owner: "Jit Debnath",
+    ownerAvatar: "/assets/images/jit.jpeg",
   },
   {
     id: "7",
@@ -115,6 +120,8 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 0,
     link: "https://github.com/Jit-nath/BitCalling-lib",
+    owner: "Jit Debnath",
+    ownerAvatar: "/assets/images/jit.jpeg",
   },
   {
     id: "8",
@@ -128,6 +135,8 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 1,
     link: "https://github.com/Jit-nath/Fortress",
+    owner: "Jit Debnath",
+    ownerAvatar: "/assets/images/jit.jpeg",
   },
   {
     id: "9",
@@ -141,6 +150,8 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 0,
     link: "https://github.com/Jit-nath/last-minute",
+    owner: "Jit Debnath",
+    ownerAvatar: "/assets/images/jit.jpeg",
   },
   {
     id: "10",
@@ -154,5 +165,7 @@ export const PROJECTS: Project[] = [
     stars: 0,
     forks: 0,
     link: "https://github.com/Jit-nath/book-reader",
+    owner: "Jit Debnath",
+    ownerAvatar: "/assets/images/jit.jpeg",
   },
 ];
