@@ -296,7 +296,7 @@ const Hero = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-violet-600 to-fuchsia-600 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                   {/* Shimmer sweep */}
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-linear-to-r from-transparent via-yellow-500/50 to-transparent skew-x-12" />
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-linear-to-r from-transparent via-white to-transparent skew-x-12" />
 
                   {/* Dark glassmorphic overlay */}
                   <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/20" />

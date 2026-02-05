@@ -7,7 +7,7 @@ export default function Stats() {
       <div className="max-w-full mx-auto">
         {/* Header */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 fade-up">
-          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide text-white leading-tight max-w-md">
+          <h2 className="text-3xl md:text-5xl xl:text-7xl font-black uppercase tracking-tight">
             Numbers That Tell Our Story
           </h2>
 

@@ -56,35 +56,51 @@ export default function ObjectivesCarousel() {
         <div className="overflow-hidden">
           {/* Track */}
           <div ref={trackRef} className="flex gap-6 will-change-transform">
-            {ACHIEVEMENTS.map((item) => (
-              <Card
-                key={item.title}
-                className="relative w-[300px] h-[380px] shrink-0 overflow-hidden rounded-xl border shadow-[0_6px_0_#000] hover:border-[#9810fa]"
-              >
-                {/* Background image */}
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="300px"
-                  className="object-cover"
-                />
+            {ACHIEVEMENTS.map((item, i) => {
+              const cardContent = (
+                <Card className="relative w-[300px] h-[380px] shrink-0 overflow-hidden rounded-xl border shadow-[0_6px_0_#000] hover:border-[#9810fa] transition-colors">
+                  {/* Background image */}
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    sizes="300px"
+                    className="object-cover"
+                  />
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/55" />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-black/55" />
 
-                {/* Content */}
-                <div className="relative z-10 flex h-full flex-col justify-end p-6 text-white">
-                  <h3 className="text-sm font-bold uppercase tracking-wide">
-                    {item.title}
-                  </h3>
+                  {/* Content */}
+                  <div className="relative z-10 flex h-full flex-col justify-end p-6 text-white text-wrap">
+                    <h3 className="text-sm font-bold uppercase tracking-wide">
+                      {item.title}
+                    </h3>
 
-                  <p className="mt-2 text-sm leading-relaxed text-white/90">
-                    {item.description}
-                  </p>
+                    <p className="mt-2 text-sm leading-relaxed text-white/90">
+                      {item.description}
+                    </p>
+                  </div>
+                </Card>
+              );
+
+              return (
+                <div key={i} className="shrink-0">
+                  {item.link ? (
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block"
+                    >
+                      {cardContent}
+                    </a>
+                  ) : (
+                    cardContent
+                  )}
                 </div>
-              </Card>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

@@ -18,42 +18,73 @@ export interface GalleryImage {
 export const BLOG_POSTS: BlogPost[] = [
   {
     id: 1,
-    title: "The Future of Decentralized Collaboration",
+    title: "Switchboard: The Oracle That Web3 Actually Deserves",
     excerpt:
-      "Exploring how DAOs and web3 protocols are reshaping how we work together. We're building systems that trust code over central authorities.",
-    author: "Sarah Chen",
-    role: "Lead Architect",
-    date: "Dec 15, 2024",
-    link: "https://linktr.ee/lnc_community",
-    image: "/assets/images/mepic.png",
+      "Exploring the next generation of decentralized oracles and why they matter for the future of Web3.",
+    author: "LNC Team",
+    role: "Engineering",
+    date: "Feb 2025",
+    link: "https://medium.com/@latenightcoders1/switchboard-the-oracle-that-web3-actually-deserves-815aebb6bb05",
+    image:
+      "https://miro.medium.com/v2/resize:fit:1100/format:webp/1*3sgIaaPmpg7PweBbGUkdzg.png",
     tag: "Web3",
     readTime: "5 min read",
   },
   {
     id: 2,
-    title: "Designing for Trust in Zero-Trust Systems",
+    title: "The Scroll of Good: Building a Better World with Blockchain",
     excerpt:
-      "UX patterns that build confidence without centralized authority. How to create interfaces that feel secure and transparent to the end user.",
-    author: "Alex Thompson",
-    role: "Product Design",
-    date: "Dec 10, 2024",
-    link: "https://linktr.ee/lnc_community",
-    image: "/assets/images/mepic.png",
-    tag: "Design",
-    readTime: "7 min read",
+      "How blockchain technology is being leveraged for social impact and transparent systems.",
+    author: "Deep Ghosh",
+    role: "Contributor",
+    date: "Feb 2025",
+    link: "https://medium.com/@deepghosh821/the-scroll-of-good-building-a-better-world-with-blockchain-643b9cc5f733",
+    image:
+      "https://miro.medium.com/v2/resize:fit:1100/format:webp/1*Sooww-F27tetSPd-Qbzlag.png",
+    tag: "Blockchain",
+    readTime: "4 min read",
   },
   {
     id: 3,
-    title: "Scaling Community-First Networks",
+    title: "The Tech Fairness Hackathon",
     excerpt:
-      "Lessons learned from growing open source ecosystems to millions of users. Community management is the new product management.",
-    author: "Marcus Rodriguez",
-    role: "Community Lead",
-    date: "Dec 05, 2024",
-    link: "https://linktr.ee/lnc_community",
-    image: "/assets/images/mepic.png",
-    tag: "Community",
-    readTime: "4 min read",
+      "Building something bold, open, and actually fair. A recap of our latest community hackathon.",
+    author: "Deep Ghosh",
+    role: "Contributor",
+    date: "Feb 2025",
+    link: "https://medium.com/@deepghosh821/the-tech-fairness-hackathon-build-something-bold-open-and-actually-fair-74b40db3621d",
+    image:
+      "https://miro.medium.com/v2/resize:fit:1100/format:webp/1*nGiwlaXylD08oAswJJVeRg.png",
+    tag: "Hackathon",
+    readTime: "6 min read",
+  },
+  {
+    id: 4,
+    title: "When Code Meets Conscience",
+    excerpt:
+      "Blockchain as a force for good. Discussing the ethical implications and potential of distributed ledger technology.",
+    author: "Snihita Nandi",
+    role: "Contributor",
+    date: "Feb 2025",
+    link: "https://medium.com/@snihitanandi2004/when-code-meets-conscience-blockchain-as-a-force-for-good-e27dafb94213",
+    image:
+      "https://miro.medium.com/v2/resize:fit:1100/format:webp/1*EafjPKO4azy_fonGcVxH6A.png",
+    tag: "Ethics",
+    readTime: "5 min read",
+  },
+  {
+    id: 5,
+    title: "14 Days of Learning on Monad",
+    excerpt:
+      "My journey into Web3 learning about the Monad ecosystem and its high-performance blockchain.",
+    author: "Deep Ghosh",
+    role: "Contributor",
+    date: "Feb 2025",
+    link: "https://medium.com/@deepghosh821/14daysoflearning-on-monad-my-journey-into-web3-c29e45118472",
+    image:
+      "https://miro.medium.com/v2/resize:fit:1100/format:webp/1*JXFKBtvMv8zdppt8jhQR-A.png",
+    tag: "Learning",
+    readTime: "8 min read",
   },
 ];
 export const GALLERY_IMAGES: GalleryImage[] = [
