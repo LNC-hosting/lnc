@@ -37,7 +37,7 @@ export default function ProjectsShowcase() {
 
       gsap.set(cards, {
         autoAlpha: 0,
-        y: 500,
+        y: 400,
         x: 0,
       });
 
@@ -73,7 +73,7 @@ export default function ProjectsShowcase() {
       // 3️⃣ Cards appear
       tl.to(cards, {
         autoAlpha: 1,
-        y: 0,
+        y: 100,
         duration: 0.15,
       });
 
@@ -89,7 +89,7 @@ export default function ProjectsShowcase() {
         ease: "none",
       });
     },
-    { scope: triggerRef }
+    { scope: triggerRef },
   );
 
   return (
@@ -102,11 +102,15 @@ export default function ProjectsShowcase() {
         className="relative w-full min-h-screen overflow-hidden"
       >
         <div className="relative min-h-screen w-full overflow-hidden">
-          <div ref={headerRef} className="absolute z-30 px-6 md:px-12 py-20">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-widest text-white">
+          <div
+            ref={headerRef}
+            className="absolute z-30 px-6 md:px-9 py-20
+             w-screen max-w-5xl"
+          >
+            <h2 className="text-4xl md:text-7xl font-black uppercase text-white">
               Project Showcase
             </h2>
-            <p className="mt-2 text-xs md:text-sm font-bold uppercase tracking-widest text-white/40">
+            <p className="mt-2 text-xs md:text-sm lg:text-lg font-bold tracking-widest text-white/40">
               Explore what we are building
             </p>
           </div>

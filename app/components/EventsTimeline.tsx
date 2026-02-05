@@ -39,7 +39,7 @@ export default function EventsTimeline() {
       });
 
       const opacitySetters = groups.map((el) =>
-        gsap.quickSetter(el, "opacity")
+        gsap.quickSetter(el, "opacity"),
       );
 
       const tl = gsap.timeline({
@@ -77,7 +77,7 @@ export default function EventsTimeline() {
             z: (i) => totalDepth - i * Z_SPACING - 200,
             ease: "none",
           },
-          "cards"
+          "cards",
         )
         .eventCallback("onUpdate", () => {
           groups.forEach((group, i) => {
@@ -94,7 +94,7 @@ export default function EventsTimeline() {
           });
         });
     },
-    { scope: container }
+    { scope: container },
   );
 
   return (
@@ -103,7 +103,7 @@ export default function EventsTimeline() {
       className="relative min-h-screen w-full bg-transparent overflow-hidden flex flex-col items-center justify-center font-pixel "
     >
       <div ref={headerRef} className="absolute top-10 z-20 text-center">
-        <h2 className="text-3xl md:text-6xl font-black uppercase tracking-wide text-white">
+        <h2 className="text-3xl md:text-7xl font-black uppercase tracking-wide text-white">
           Events Highlights
         </h2>
       </div>

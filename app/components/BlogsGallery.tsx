@@ -1,293 +1,261 @@
 "use client";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ArrowRight, Grid, LayoutTemplate } from "lucide-react";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, useEffect } from "react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import { ArrowRight, Grid, LayoutTemplate } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BLOG_POSTS, GALLERY_IMAGES } from "@/app/data/blogs";
+
+type Section = "blogs" | "images";
+
 export default function BlogsGallery() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [activeSection, setActiveSection] = useState<"blogs" | "images">(
-    "blogs"
-  );
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeSection, setActiveSection] = useState<Section>("blogs");
+  const [activeBlog, setActiveBlog] = useState(0);
   const [visibleImages, setVisibleImages] = useState(6);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-  }, []);
-
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: containerRef.current, start: "top 80%" },
-      });
-      tl.from(".header-reveal", {
-        y: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out",
-        stagger: 0.1,
-      });
-    },
-    { scope: containerRef }
-  );
-
-  // Handle manual tab click
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-  };
-
-  useGSAP(
-    () => {
-      gsap.fromTo(
-        ".section-content",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-      );
-    },
-    { scope: containerRef, dependencies: [activeSection] }
-  );
-
-  const handleLoadMore = () => {
-    setVisibleImages((prev) => prev + 6);
-  };
 
   return (
     <section
       id="community"
-      className={cn(
-        "relative z-10 w-full bg-transparent font-pixel text-white border-t border-white/10 flex flex-col",
-        activeSection === "blogs" ? "h-screen overflow-hidden" : "min-h-screen"
-      )}
+      className="relative w-full border-t border-white/10 bg-transparent text-white"
     >
-      <div
-        ref={containerRef}
-        className="container mx-auto px-4 md:px-12 py-12 flex-1 flex flex-col"
-      >
-        <div className="mb-10 flex flex-col items-start justify-between gap-8 border-b border-white/10 pb-8 md:flex-row md:items-end shrink-0">
-          <div className="header-reveal">
-            <h2 className="text-3xl font-black uppercase tracking-tight md:text-5xl">
-              The <span className="text-white/50">Chronicles</span>
-            </h2>
-          </div>
-          <div className="header-reveal flex gap-0 border border-white/20 bg-black/40 rounded-full overflow-hidden p-1">
-            <button
+      <div className="container mx-auto px-4 md:px-12 py-12">
+        {/* Header */}
+        <header className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between border-b border-white/10 pb-8">
+          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">
+            The <span className="text-white/50">Chronicles</span>
+          </h2>
+
+          {/* Tabs */}
+          <div
+            role="tablist"
+            aria-label="Content sections"
+            className="flex rounded-full border border-white/20 bg-black/40 p-1"
+          >
+            <TabButton
+              icon={<LayoutTemplate className="h-4 w-4" />}
+              label="Blogs"
+              selected={activeSection === "blogs"}
               onClick={() => setActiveSection("blogs")}
-              className={cn(
-                "flex items-center gap-2 px-6 py-3 text-sm font-bold uppercase tracking-wider transition-all rounded-full",
-                activeSection === "blogs"
-                  ? "bg-purple-500 text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
-              )}
-            >
-              <LayoutTemplate className="h-4 w-4" />
-              Blogs
-            </button>
-            <button
+            />
+            <TabButton
+              icon={<Grid className="h-4 w-4" />}
+              label="Images"
+              selected={activeSection === "images"}
               onClick={() => setActiveSection("images")}
-              className={cn(
-                "flex items-center gap-2 px-6 py-3 text-sm font-bold uppercase tracking-wider transition-all rounded-full",
-                activeSection === "images"
-                  ? "bg-purple-500 text-white"
-                  : "text-white/60 hover:text-white hover:bg-white/5"
-              )}
-            >
-              <Grid className="h-4 w-4" />
-              Images
-            </button>
+            />
           </div>
-        </div>
-        <div
-          className={cn(
-            "flex-1 section-content relative",
-            activeSection === "blogs" ? "overflow-hidden" : ""
-          )}
-        >
-          {activeSection === "blogs" && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full pb-12">
-              <div className="hidden lg:flex lg:col-span-4 flex-col gap-4 overflow-y-auto pr-2 custom-scrollbar">
-                {BLOG_POSTS.map((post, index) => (
-                  <button
-                    key={post.id}
-                    onClick={() => handleTabClick(index)}
-                    className={cn(
-                      "group relative flex w-full cursor-pointer items-center gap-4 border p-4 text-left transition-all rounded-2xl",
-                      activeTab === index
-                        ? "border-purple-500 bg-white/10 shadow-[0_0_15px_rgba(168,85,247,0.15)]"
-                        : "border-white/10 bg-black/40 hover:bg-white/5 hover:border-purple-500/50"
-                    )}
-                  >
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden bg-black/50 border border-white/10 rounded-lg">
-                      <Image
-                        src={post.image}
-                        alt={post.title}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-110"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="mb-1 flex items-center gap-2 text-[10px] uppercase text-white/40 font-mono">
-                        <span
-                          className={cn(
-                            activeTab === index ? "text-purple-400" : ""
-                          )}
-                        >
-                          {post.tag}
-                        </span>
-                      </div>
-                      <h4
-                        className={cn(
-                          "truncate text-sm font-bold transition-colors uppercase",
-                          activeTab === index
-                            ? "text-white"
-                            : "text-white/60 group-hover:text-white"
-                        )}
-                      >
-                        {post.title}
-                      </h4>
-                    </div>
-                    {activeTab === index && (
-                      <div className="absolute right-4 w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.8)] animate-pulse" />
-                    )}
-                  </button>
-                ))}
-              </div>
-              <div className="col-span-1 lg:col-span-8 relative h-full">
-                {BLOG_POSTS.map((post, index) => (
-                  <div
-                    key={post.id}
-                    className={cn(
-                      "absolute inset-0 transition-opacity duration-300 ease-out flex flex-col",
-                      activeTab === index
-                        ? "opacity-100 pointer-events-auto z-10"
-                        : "opacity-0 pointer-events-none z-0 delay-0"
-                    )}
-                  >
-                    <div className="flex-1 w-full group relative overflow-hidden border border-white/10 bg-black/60 backdrop-blur-sm rounded-3xl shadow-2xl shadow-purple-500/10">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 h-full">
-                        <div className="relative h-1/2 lg:h-full overflow-hidden border-b lg:border-b-0 lg:border-r border-white/10">
-                          <Image
-                            src={post.image}
-                            alt={post.title}
-                            fill
-                            className="object-cover transition-transform duration-700 group-hover:scale-105"
-                            priority={index === 0}
-                          />
-                          <div className="absolute inset-0 bg-linear-to-t lg:bg-linear-to-r from-black/80 via-black/20 to-transparent" />
-                          <div className="absolute top-4 left-4 inline-flex items-center gap-2 border border-purple-500/50 bg-black/60 backdrop-blur-sm px-3 py-1.5 text-[10px] font-bold uppercase text-purple-400 rounded-full">
-                            {post.tag}
-                          </div>
-                        </div>
-                        <div className="relative h-1/2 lg:h-full p-6 lg:p-10 flex flex-col justify-center">
-                          <div className="absolute top-4 left-4 w-2 h-2 border-t-2 border-l-2 border-white/20" />
-                          <div className="absolute top-4 right-4 w-2 h-2 border-t-2 border-r-2 border-white/20" />
-                          <div className="absolute bottom-4 left-4 w-2 h-2 border-b-2 border-l-2 border-white/20" />
-                          <div className="absolute bottom-4 right-4 w-2 h-2 border-b-2 border-r-2 border-white/20" />
-                          <h3 className="text-2xl lg:text-4xl font-black leading-tight text-white uppercase tracking-wide mb-6 drop-shadow-lg">
-                            {post.title}
-                          </h3>
-                          <div className="flex items-center gap-3 mb-6 text-xs text-white/50 font-mono uppercase">
-                            <div className="relative h-8 w-8 rounded-full border border-white/20 overflow-hidden">
-                              <Image
-                                src={post.image}
-                                alt="author"
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-white font-medium">
-                                {post.author}
-                              </span>
-                              <span className="text-purple-400">
-                                {post.role}
-                              </span>
-                            </div>
-                            <span className="ml-auto text-white/40">
-                              {post.date}
-                            </span>
-                          </div>
-                          <p className="text-sm lg:text-lg font-mono leading-relaxed text-white/70 mb-8 line-clamp-4 lg:line-clamp-none">
-                            {post.excerpt}
-                          </p>
-                          <div className="flex items-center gap-4 mt-auto">
-                            <Link
-                              href={post.link}
-                              className="flex-1 group/btn inline-flex items-center justify-center gap-2 bg-purple-500 hover:bg-purple-600 px-6 py-4 text-sm font-bold uppercase text-white transition-all rounded-xl hover:scale-105 shadow-lg shadow-purple-500/20"
-                            >
-                              Read Story
-                              <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                            </Link>
-                            <span className="px-4 text-xs text-white/40 font-mono uppercase">
-                              {post.readTime}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <div className="lg:hidden absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
-                  {BLOG_POSTS.map((_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "h-1.5 rounded-full transition-all duration-300",
-                        activeTab === i
-                          ? "w-6 bg-purple-500"
-                          : "w-1.5 bg-white/30"
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          {activeSection === "images" && (
-            <div className="flex flex-col items-center gap-12 pb-32 w-full">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 w-full">
-                {GALLERY_IMAGES.slice(0, visibleImages).map((img, i) => (
-                  <div
-                    key={i}
-                    className="group relative aspect-square overflow-hidden border border-white/10 bg-[#111] transition-all hover:border-purple-500 rounded-2xl cursor-pointer"
-                  >
-                    <Image
-                      src={img.src}
-                      alt={img.alt}
-                      fill
-                      sizes="(max-width: 640px) 100vw,
-         (max-width: 1024px) 50vw,
-         33vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
-                    />
-                    <div className="absolute bottom-6 left-6 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                      <p className="font-mono text-xs font-bold uppercase text-purple-400 mb-1">
-                        {img.tag}
-                      </p>
-                      <p className="font-bold uppercase text-white text-xl">
-                        {img.alt}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {visibleImages < GALLERY_IMAGES.length && (
-                <button
-                  onClick={handleLoadMore}
-                  className="px-8 py-3 border border-white/20 bg-transparent text-white font-bold uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300 rounded-full mb-12"
-                >
-                  Load More
-                </button>
-              )}
-            </div>
+        </header>
+
+        {/* Content */}
+        <div className="mt-12">
+          {activeSection === "blogs" ? (
+            <BlogsSection
+              activeBlog={activeBlog}
+              setActiveBlog={setActiveBlog}
+            />
+          ) : (
+            <ImagesSection
+              visibleImages={visibleImages}
+              setVisibleImages={setVisibleImages}
+            />
           )}
         </div>
       </div>
     </section>
+  );
+}
+
+/* ---------------------------------------------
+   BLOGS
+---------------------------------------------- */
+
+function BlogsSection({
+  activeBlog,
+  setActiveBlog,
+}: {
+  activeBlog: number;
+  setActiveBlog: (i: number) => void;
+}) {
+  const post = BLOG_POSTS[activeBlog];
+
+  return (
+    <div className="grid lg:grid-cols-12 gap-8">
+      {/* Blog list */}
+      <aside className="lg:col-span-4">
+        <ul role="list" className="space-y-3">
+          {BLOG_POSTS.map((p, i) => (
+            <li key={p.id}>
+              <button
+                onClick={() => setActiveBlog(i)}
+                aria-current={activeBlog === i}
+                className={cn(
+                  "w-full rounded-xl border p-4 text-left transition touch-manipulation",
+                  activeBlog === i
+                    ? "border-purple-500 bg-white/10"
+                    : "border-white/10 hover:border-purple-500/50",
+                )}
+              >
+                <p className="text-xs uppercase text-purple-400 mb-1">
+                  {p.tag}
+                </p>
+                <h4 className="font-bold uppercase truncate">{p.title}</h4>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      {/* Blog content */}
+      <article
+        className="
+          lg:col-span-8
+          rounded-3xl
+          border border-white/10
+          bg-black/60
+          overflow-visible
+          lg:overflow-hidden
+        "
+        aria-live="polite"
+      >
+        <div className="grid lg:grid-cols-2">
+          {/* Image */}
+          <div className="relative aspect-video lg:aspect-auto">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+            />
+
+            {/* decorative overlay — MUST NOT intercept clicks */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+
+            <span className="pointer-events-none absolute top-4 left-4 rounded-full bg-black/60 px-3 py-1 text-xs font-bold uppercase text-purple-400 border border-purple-500/40">
+              {post.tag}
+            </span>
+          </div>
+
+          {/* Text */}
+          <div className="relative p-6 lg:p-10 flex flex-col">
+            <h3 className="text-2xl lg:text-4xl font-black uppercase mb-6">
+              {post.title}
+            </h3>
+
+            <div className="flex items-center gap-3 text-xs text-white/50 mb-6">
+              <span className="font-bold text-white">{post.author}</span>
+              <span className="text-purple-400">{post.role}</span>
+              <span className="ml-auto">{post.date}</span>
+            </div>
+
+            <p className="text-sm lg:text-base text-white/70 leading-relaxed mb-8">
+              {post.excerpt}
+            </p>
+
+            <div className="mt-auto flex items-center gap-4">
+              <Link
+                href={post.link}
+                className="
+                  inline-flex items-center gap-2
+                  rounded-xl bg-purple-500
+                  px-6 py-4
+                  text-sm font-bold uppercase
+                  transition hover:bg-purple-600
+                  touch-manipulation
+                "
+              >
+                Read Story
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+
+              <span className="text-xs text-white/40 uppercase">
+                {post.readTime}
+              </span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  );
+}
+
+/* ---------------------------------------------
+   IMAGES
+---------------------------------------------- */
+
+function ImagesSection({
+  visibleImages,
+  setVisibleImages,
+}: {
+  visibleImages: number;
+  setVisibleImages: (n: number) => void;
+}) {
+  return (
+    <div className="flex flex-col gap-12">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {GALLERY_IMAGES.slice(0, visibleImages).map((img, i) => (
+          <div
+            key={i}
+            className="relative aspect-square overflow-hidden rounded-2xl border border-white/10 bg-[#111]"
+          >
+            <Image src={img.src} alt={img.alt} fill className="object-cover" />
+            <div className="pointer-events-none absolute bottom-4 left-4">
+              <p className="text-xs uppercase text-purple-400">{img.tag}</p>
+              <p className="font-bold uppercase">{img.alt}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {visibleImages < GALLERY_IMAGES.length && (
+        <button
+          onClick={() => setVisibleImages(visibleImages + 6)}
+          className="
+            mx-auto rounded-full
+            border border-white/20
+            px-8 py-3
+            font-bold uppercase
+            transition hover:bg-white hover:text-black
+            touch-manipulation
+          "
+        >
+          Load More
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ---------------------------------------------
+   TAB BUTTON
+---------------------------------------------- */
+
+function TabButton({
+  label,
+  icon,
+  selected,
+  onClick,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  selected: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      role="tab"
+      aria-selected={selected}
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold uppercase transition touch-manipulation",
+        selected
+          ? "bg-purple-500 text-white"
+          : "text-white/60 hover:text-white",
+      )}
+    >
+      {icon}
+      {label}
+    </button>
   );
 }

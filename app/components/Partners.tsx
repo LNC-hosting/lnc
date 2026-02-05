@@ -97,31 +97,6 @@ export default function Partners() {
     ...row2Communities,
   ];
 
-  useGSAP(
-    () => {
-      if (headerRef.current) {
-        gsap.fromTo(
-          headerRef.current,
-          {
-            y: 30,
-            opacity: 0,
-          },
-          {
-            scrollTrigger: {
-              trigger: headerRef.current,
-              start: "top 80%",
-            },
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-          },
-        );
-      }
-    },
-    { scope: container },
-  );
-
   // Seamless infinite scroll animation
   useEffect(() => {
     if (row1Ref.current && row2Ref.current) {
@@ -168,7 +143,7 @@ export default function Partners() {
 
       <div className="relative w-full">
         {/* Header Section */}
-        <div ref={headerRef} className="mb-12 md:mb-16 text-center px-6">
+        <div className="mb-12 md:mb-16 text-center px-6 animate-fade-in-up">
           <div className="inline-block mb-6">
             <p className="text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-purple-400 mb-2">
               {"// ECOSYSTEM"}

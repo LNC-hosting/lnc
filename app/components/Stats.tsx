@@ -1,67 +1,29 @@
 "use client";
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { STATS } from "@/app/data/stats";
-gsap.registerPlugin(ScrollTrigger);
+
 export default function Stats() {
-  const container = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  useGSAP(
-    () => {
-      if (headerRef.current) {
-        gsap.from(headerRef.current, {
-          scrollTrigger: { trigger: headerRef.current, start: "top 80%" },
-          y: 20,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        });
-      }
-      if (statsRef.current) {
-        const items = statsRef.current.children;
-        gsap.from(items, {
-          scrollTrigger: { trigger: statsRef.current, start: "top 80%" },
-          y: 30,
-          opacity: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-        });
-      }
-    },
-    { scope: container }
-  );
   return (
-    <section
-      ref={container}
-      className="bg-transparent py-20 px-6 md:px-12 w-full font-pixel border-t-2 border-dashed border-white/10"
-    >
-      <div className="max-w-6xl mx-auto">
-        <div
-          ref={headerRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20"
-        >
+    <section className="bg-transparent py-10 px-12 md:px-28 w-full font-pixel border-t-2 border-dashed border-white/10">
+      <div className="max-w-full mx-auto">
+        {/* Header */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20 fade-up">
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-wide text-white leading-tight max-w-md">
             Numbers That Tell Our Story
           </h2>
+
           <p className="text-sm md:text-base font-mono uppercase text-[#71717a] leading-relaxed max-w-lg">
             LNC has grown because people show up and do the work. These numbers
             reflect what happens when a community commits to something real.
           </p>
         </div>
-        <div
-          ref={statsRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 border-l border-white/10"
-        >
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-l border-white/10">
           {STATS.map((stat, index) => (
             <div
               key={index}
-              className={`pl-8 border-l border-white/10 md:border-l-0 ${
-                index < STATS.length - 1 ? "md:border-r" : ""
-              }`}
+              className="pl-8 border-l border-white/10 md:border-l-0 md:border-r last:md:border-r-0 fade-up"
+              style={{ animationDelay: `${index * 80}ms` }}
             >
               <h3 className="text-4xl md:text-6xl font-black text-white mb-2">
                 {stat.value}
@@ -73,6 +35,30 @@ export default function Stats() {
           ))}
         </div>
       </div>
+
+      {/* Local styles only */}
+      <style jsx>{`
+        .fade-up {
+          animation: fadeUp 0.6s ease-out both;
+        }
+
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .fade-up {
+            animation: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }

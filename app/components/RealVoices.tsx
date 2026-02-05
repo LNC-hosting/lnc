@@ -73,7 +73,7 @@ export default function RealVoices() {
             duration: 1,
             ease: "power2.out",
           },
-          "<0.2"
+          "<0.2",
         );
         const finalX = -(scrollWidth - windowWidth + 100);
         tl.to(cardsRef.current, { x: finalX, duration: 3, ease: "none" });
@@ -86,7 +86,7 @@ export default function RealVoices() {
           tl.to(
             projectSection,
             { autoAlpha: 1, duration: 1.5, ease: "power2.out" },
-            "<"
+            "<",
           );
         }
       });
@@ -125,7 +125,7 @@ export default function RealVoices() {
         tl.to(
           cardsRef.current,
           { x: 0, autoAlpha: 1, duration: 0.8, ease: "power2.out" },
-          "<"
+          "<",
         );
         const finalX = -(scrollWidth - windowWidth + 40);
         tl.to(cardsRef.current, { x: finalX, duration: 3, ease: "none" });
@@ -151,10 +151,10 @@ export default function RealVoices() {
             <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/40">
               visions
             </p>
-            <h2 className="text-4xl font-black uppercase tracking-wide text-white md:text-6xl">
+            <h2 className="text-4xl font-black uppercase tracking-wide text-white md:text-7xl">
               Meet the Minds
             </h2>
-            <p className="mt-4 text-sm text-white/60">
+            <p className="mt-4 text-large text-white/60">
               The minds behind the machine. clear vision, execution, and
               unwavering dedication.
             </p>
